@@ -84,6 +84,7 @@ UI_COMMON_OBJS = \
 
 EXPLORER_OBJS = \
   $O\ContextMenu.obj \
+  $O\ArchInfo.obj \
   $O\RegistryContextMenu.obj \
 
 GUI_OBJS = \

@@ -36,7 +36,8 @@ public:
     kHash_CRC64,
     kHash_SHA1,
     kHash_SHA256,
-    kHash_All
+    kHash_All,
+    kExtractToFolderOrPlain
   };
   
   MY_UNKNOWN_IMP2_MT(IContextMenu, IShellExtInit)

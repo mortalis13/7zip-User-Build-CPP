@@ -31,6 +31,9 @@
 
 #include "resource.h"
 
+#include "ArchInfo.h"
+
+
 using namespace NWindows;
 using namespace NFile;
 using namespace NDir;
@@ -173,6 +176,12 @@ static const CContextMenuCommand g_Commands[] =
     IDS_CONTEXT_EXTRACT_TO
   },
   {
+    NContextMenuFlags::kExtractToFolderOrPlain,
+    CZipContextMenu::kExtractToFolderOrPlain,
+    "ExtractTo",
+    IDS_CONTEXT_EXTRACT_TO_FOLDER_OR_PLAIN
+  },
+  {
     NContextMenuFlags::kTest,
     CZipContextMenu::kTest,
     "Test",
@@ -206,7 +215,7 @@ static const CContextMenuCommand g_Commands[] =
     NContextMenuFlags::kCompressToZip,
     CZipContextMenu::kCompressToZip,
     "CompressToZip",
-    IDS_CONTEXT_COMPRESS_TO
+    IDS_CONTEXT_COMPRESS_TO_ZIP
   },
   {
     NContextMenuFlags::kCompressToZipEmail,
@@ -593,63 +602,6 @@ STDMETHODIMP CZipContextMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu,
       }
     }
     
-    // const UString &fileName = _fileNames.Front();
-    
-    if (needExtract)
-    {
-      {
-        UString baseFolder = fs2us(folderPrefix);
-        if (_dropMode)
-          baseFolder = _dropPath;
-    
-        UString specFolder ('*');
-        if (_fileNames.Size() == 1)
-          specFolder = GetSubFolderNameForExtract(fs2us(fi0.Name));
-        specFolder.Add_PathSepar();
-
-        if ((contextMenuFlags & NContextMenuFlags::kExtract) != 0)
-        {
-          // Extract
-          CCommandMapItem commandMapItem;
-          FillCommand(kExtract, mainString, commandMapItem);
-          commandMapItem.Folder = baseFolder + specFolder;
-          MyInsertMenu(popupMenu, subIndex++, currentCommandID++, mainString, bitmap);
-          _commandMap.Add(commandMapItem);
-        }
-
-        if ((contextMenuFlags & NContextMenuFlags::kExtractHere) != 0)
-        {
-          // Extract Here
-          CCommandMapItem commandMapItem;
-          FillCommand(kExtractHere, mainString, commandMapItem);
-          commandMapItem.Folder = baseFolder;
-          MyInsertMenu(popupMenu, subIndex++, currentCommandID++, mainString, bitmap);
-          _commandMap.Add(commandMapItem);
-        }
-
-        if ((contextMenuFlags & NContextMenuFlags::kExtractTo) != 0)
-        {
-          // Extract To
-          CCommandMapItem commandMapItem;
-          UString s;
-          FillCommand(kExtractTo, s, commandMapItem);
-          commandMapItem.Folder = baseFolder + specFolder;
-          MyFormatNew_ReducedName(s, specFolder);
-          MyInsertMenu(popupMenu, subIndex++, currentCommandID++, s, bitmap);
-          _commandMap.Add(commandMapItem);
-        }
-      }
-
-      if ((contextMenuFlags & NContextMenuFlags::kTest) != 0)
-      {
-        // Test
-        CCommandMapItem commandMapItem;
-        FillCommand(kTest, mainString, commandMapItem);
-        MyInsertMenu(popupMenu, subIndex++, currentCommandID++, mainString, bitmap);
-        _commandMap.Add(commandMapItem);
-      }
-    }
-    
     const UString arcName = CreateArchiveName(_fileNames, _fileNames.Size() == 1 ? &fi0 : NULL);
 
     UString arcName7z = arcName;
@@ -715,7 +667,7 @@ STDMETHODIMP CZipContextMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu,
       _commandMap.Add(commandMapItem);
     }
     #endif
-
+    
     // CompressToZip
     if (contextMenuFlags & NContextMenuFlags::kCompressToZip &&
         !arcNameZip.IsEqualTo_NoCase(fs2us(fi0.Name)))
@@ -748,6 +700,73 @@ STDMETHODIMP CZipContextMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu,
       _commandMap.Add(commandMapItem);
     }
     #endif
+    
+    // const UString &fileName = _fileNames.Front();
+    
+    if (needExtract)
+    {
+      {
+        UString baseFolder = fs2us(folderPrefix);
+        if (_dropMode)
+          baseFolder = _dropPath;
+    
+        UString specFolder ('*');
+        if (_fileNames.Size() == 1)
+          specFolder = GetSubFolderNameForExtract(fs2us(fi0.Name));
+        specFolder.Add_PathSepar();
+
+        if ((contextMenuFlags & NContextMenuFlags::kExtract) != 0)
+        {
+          // Extract
+          CCommandMapItem commandMapItem;
+          FillCommand(kExtract, mainString, commandMapItem);
+          commandMapItem.Folder = baseFolder + specFolder;
+          MyInsertMenu(popupMenu, subIndex++, currentCommandID++, mainString, bitmap);
+          _commandMap.Add(commandMapItem);
+        }
+
+        if ((contextMenuFlags & NContextMenuFlags::kExtractHere) != 0)
+        {
+          // Extract Here
+          CCommandMapItem commandMapItem;
+          FillCommand(kExtractHere, mainString, commandMapItem);
+          commandMapItem.Folder = baseFolder;
+          MyInsertMenu(popupMenu, subIndex++, currentCommandID++, mainString, bitmap);
+          _commandMap.Add(commandMapItem);
+        }
+
+        if ((contextMenuFlags & NContextMenuFlags::kExtractTo) != 0)
+        {
+          // Extract To
+          CCommandMapItem commandMapItem;
+          UString s;
+          FillCommand(kExtractTo, s, commandMapItem);
+          commandMapItem.Folder = baseFolder + specFolder;
+          MyFormatNew_ReducedName(s, specFolder);
+          MyInsertMenu(popupMenu, subIndex++, currentCommandID++, s, bitmap);
+          _commandMap.Add(commandMapItem);
+        }
+        
+        if ((contextMenuFlags & NContextMenuFlags::kExtractToFolderOrPlain) != 0)
+        {
+          CCommandMapItem commandMapItem;
+          UString s;
+          FillCommand(kExtractToFolderOrPlain, s, commandMapItem);
+          commandMapItem.Folder = baseFolder;
+          MyInsertMenu(popupMenu, subIndex++, currentCommandID++, s, bitmap);
+          _commandMap.Add(commandMapItem);
+        }
+      }
+
+      if ((contextMenuFlags & NContextMenuFlags::kTest) != 0)
+      {
+        // Test
+        CCommandMapItem commandMapItem;
+        FillCommand(kTest, mainString, commandMapItem);
+        MyInsertMenu(popupMenu, subIndex++, currentCommandID++, mainString, bitmap);
+        _commandMap.Add(commandMapItem);
+      }
+    }
   }
 
 
@@ -897,6 +916,34 @@ STDMETHODIMP CZipContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO commandInfo)
             (cmdID == kExtract), // showDialog
             (cmdID == kExtractTo) && _elimDup.Val // elimDup
             );
+        break;
+      }
+      case kExtractToFolderOrPlain:
+      {
+        for (UInt32 i = 0; i < _fileNames.Size(); i++) {
+          const UString &fileName = _fileNames[i];
+          UStringVector arcPaths;
+          arcPaths.Add(fileName);
+          
+          bool toFolder = true;
+          int numItems = getArchRootItems(fileName);
+          if (numItems == 1) toFolder = false;
+          
+          FString folderPrefix;
+          GetOnlyDirPrefix(us2fs(fileName), folderPrefix);
+          UString baseFolder = fs2us(folderPrefix);
+          UString folder = baseFolder;
+          
+          if (toFolder) {
+            NFind::CFileInfo fileInfo;
+            if (!fileInfo.Find(us2fs(fileName))) continue;
+            UString specFolder = GetSubFolderNameForExtract(fs2us(fileInfo.Name));
+            specFolder.Add_PathSepar();
+            folder += specFolder;
+          }
+          
+          ExtractArchives(arcPaths, folder, (cmdID == kExtract), toFolder && _elimDup.Val);
+        }
         break;
       }
       case kTest:

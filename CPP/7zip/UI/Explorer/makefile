@@ -2,6 +2,7 @@ PROG = 7-zip.dll
 DEF_FILE = Explorer.def
 CFLAGS = $(CFLAGS) \
   -DLANG \
+  -DEXTERNAL_CODECS \
 
 !IFDEF UNDER_CE
 LIBS = $(LIBS) Commctrl.lib
@@ -14,6 +15,8 @@ EXPLORER_OBJS = \
   $O\DllExportsExplorer.obj \
   $O\ContextMenu.obj \
   $O\MyMessages.obj \
+  \
+  $O\ArchInfo.obj \
 
 COMMON_OBJS = \
   $O\IntToString.obj \
@@ -26,6 +29,9 @@ COMMON_OBJS = \
   $O\StringToInt.obj \
   $O\UTFConvert.obj \
   $O\Wildcard.obj \
+  \
+  $O\CommandLineParser.obj \
+  $O\ListFileUtils.obj \
 
 WIN_OBJS = \
   $O\DLL.obj \
@@ -42,6 +48,13 @@ WIN_OBJS = \
   $O\Shell.obj \
   $O\Synchronization.obj \
   $O\Window.obj \
+  \
+  $O\FileLink.obj \
+  $O\FileSystem.obj \
+  $O\PropVariant.obj \
+  $O\PropVariantConv.obj \
+  $O\System.obj \
+  $O\TimeUtils.obj \
 
 !IFDEF UNDER_CE
 
@@ -49,6 +62,20 @@ WIN_OBJS = $(WIN_OBJS) \
   $O\CommonDialog.obj \
 
 !ENDIF
+
+7ZIP_COMMON_OBJS = \
+  $O\FilePathAutoRename.obj \
+  $O\FileStreams.obj \
+  $O\LimitedStreams.obj \
+  $O\MethodProps.obj \
+  $O\ProgressUtils.obj \
+  $O\PropId.obj \
+  $O\StreamObjects.obj \
+  $O\StreamUtils.obj \
+  $O\UniqBlocks.obj \
+  
+COMPRESS_OBJS = \
+  $O\CopyCoder.obj \
 
 WIN_CTRL_OBJS = \
   $O\Dialog.obj \
@@ -59,6 +86,23 @@ UI_COMMON_OBJS = \
   $O\CompressCall.obj \
   $O\ExtractingFilePath.obj \
   $O\ZipRegistry.obj \
+  \
+  $O\ArchiveCommandLine.obj \
+  $O\ArchiveExtractCallback.obj \
+  $O\ArchiveOpenCallback.obj \
+  $O\DefaultName.obj \
+  $O\EnumDirItems.obj \
+  $O\LoadCodecs.obj \
+  $O\OpenArchive.obj \
+  $O\PropIDUtils.obj \
+  $O\SetProperties.obj \
+  $O\SortUtils.obj \
+  $O\TempFiles.obj \
+  $O\Update.obj \
+  $O\UpdateAction.obj \
+  $O\UpdateCallback.obj \
+  $O\UpdatePair.obj \
+  $O\UpdateProduce.obj \
 
 FM_OBJS = \
   $O\FormatUtils.obj \
@@ -70,5 +114,8 @@ FM_OBJS = \
 C_OBJS = \
   $O\CpuArch.obj \
   $O\Threads.obj \
+  \
+  $O\Alloc.obj \
+  $O\Sort.obj \
 
 !include "../../7zip.mak"

@@ -21,6 +21,8 @@ namespace NContextMenuFlags
   const UInt32 kCompressToZipEmail = 1 << 13;
 
   const UInt32 kCRC = (UInt32)1 << 31;
+  
+  const UInt32 kExtractToFolderOrPlain = 1 << 20;
 }
 
 #endif
