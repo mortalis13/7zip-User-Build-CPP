@@ -24,5 +24,5 @@ Based on **7zip build 1900**: https://www.7-zip.org/a/7z1900-src.7z.
 ## Installation
 
 - copy **7-zip.dll** and **7zFM.exe** to the **7-Zip** folder
-- you may have to kill the **explorer.exe** process in the **Task Manager** to unlock the existing **7-zip.dll**, then execute **explorer.exe** from the **Task Manager -> File -> Run new task** to restore the **Windows Explorer** shell
-- **7zFM.exe** should have the changed context menu items in the **Tools -> Options -> 7-Zip**
+- you may have to kill the **explorer.exe** process in the **Task Manager** to unlock the existing **7-zip.dll**, then execute **explorer.exe** from the **"Task Manager -> File -> Run new task"** to restore the **Windows Explorer** shell
+- **7zFM.exe** should have the changed context menu items in the **"Tools -> Options -> 7-Zip"**
