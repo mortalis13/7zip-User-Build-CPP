@@ -12,14 +12,17 @@ Based on **7zip build 1900**: https://www.7-zip.org/a/7z1900-src.7z.
 ## Build
 
 - Visual Studio 2017
-- open **VS Dev Console**
-  - Start -> Visual Studio 2017 -> Visual Studio Tools -> VC -> x64 Native Tools Command Prompt for VS 2017
-  - %comspec% /k "[PROGRAM_FILES]\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+- open **VS Dev Console**: `Start -> Visual Studio 2017 -> Visual Studio Tools -> VC -> x64 Native Tools Command Prompt for VS 2017`
+- or execute the next command from the default console to load VS build environment:
+  ```
+  %comspec% /k "[PROGRAM_FILES]\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvars64.bat"
+  ```
 - execute commands inside the command prompt:
   ```
-  cd 7z-src\CPP\7zip\UI\Explorer
+  cd [PATH_TO_7Z_SOURCE]\CPP\7zip\UI\Explorer
   nmake PLATFORM=x64
   ```
+- there are also `.bat` scripts inside the **CPP** folder to build **FileManager** and **Explorer** modules
 
 ## Installation
 

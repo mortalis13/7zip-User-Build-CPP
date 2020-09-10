@@ -212,6 +212,12 @@ static const CContextMenuCommand g_Commands[] =
     IDS_CONTEXT_COMPRESS_TO_EMAIL
   },
   {
+    NContextMenuFlags::kCompressToSeparate,
+    CZipContextMenu::kCompressToSeparate,
+    "CompressToSeparate",
+    IDS_CONTEXT_COMPRESS_TO_SEPARATE
+  },
+  {
     NContextMenuFlags::kCompressToZip,
     CZipContextMenu::kCompressToZip,
     "CompressToZip",
@@ -668,6 +674,23 @@ STDMETHODIMP CZipContextMenu::QueryContextMenu(HMENU hMenu, UINT indexMenu,
     }
     #endif
     
+    // CompressToSeparate
+    if (contextMenuFlags & NContextMenuFlags::kCompressToSeparate)
+    {
+      CCommandMapItem commandMapItem;
+      UString s;
+      FillCommand(kCompressToSeparate, s, commandMapItem);
+      if (_dropMode)
+        commandMapItem.Folder = _dropPath;
+      else
+        commandMapItem.Folder = fs2us(folderPrefix);
+      commandMapItem.ArcName = arcNameZip;
+      commandMapItem.ArcType = "zip";
+      MyFormatNew_ReducedName(s, arcNameZip);
+      MyInsertMenu(popupMenu, subIndex++, currentCommandID++, s, bitmap);
+      _commandMap.Add(commandMapItem);
+    }
+    
     // CompressToZip
     if (contextMenuFlags & NContextMenuFlags::kCompressToZip &&
         !arcNameZip.IsEqualTo_NoCase(fs2us(fi0.Name)))
@@ -970,6 +993,22 @@ STDMETHODIMP CZipContextMenu::InvokeCommand(LPCMINVOKECOMMANDINFO commandInfo)
             commandMapItem.ArcName, commandMapItem.ArcType,
             addExtension,
             _fileNames, email, showDialog, false);
+        break;
+      }
+      
+      case kCompressToSeparate:
+      {
+        for (UInt32 i = 0; i < _fileNames.Size(); i++) {
+          UString fileName = _fileNames[i];
+          UStringVector filePaths;
+          filePaths.Add(fileName);
+          
+          UString arcName = CreateArchiveName(filePaths, NULL);
+          arcName += L"." + commandMapItem.ArcType;
+          
+          CompressFiles(commandMapItem.Folder, arcName, commandMapItem.ArcType, false,
+            filePaths, false, false, false);
+        }
         break;
       }
       

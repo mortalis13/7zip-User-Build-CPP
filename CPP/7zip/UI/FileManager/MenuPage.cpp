@@ -55,6 +55,7 @@ static const CContextMenuItem kMenuItems[] =
   { IDS_CONTEXT_TEST, kTest },
 
   { IDS_CONTEXT_COMPRESS, kCompress },
+  { IDS_CONTEXT_COMPRESS_TO_SEPARATE, kCompressToSeparate },
   { IDS_CONTEXT_COMPRESS_TO, kCompressTo7z },
   { IDS_CONTEXT_COMPRESS_TO_ZIP, kCompressToZip },
 

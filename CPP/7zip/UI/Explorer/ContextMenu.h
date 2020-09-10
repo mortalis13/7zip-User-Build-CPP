@@ -30,6 +30,7 @@ public:
     kCompressEmail,
     kCompressTo7z,
     kCompressTo7zEmail,
+    kCompressToSeparate,
     kCompressToZip,
     kCompressToZipEmail,
     kHash_CRC32,
