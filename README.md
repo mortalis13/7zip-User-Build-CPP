@@ -5,10 +5,10 @@ Based on **7zip build 1900**: https://www.7-zip.org/a/7z1900-src.7z.
 
 ## Changes
 
-- added numbers for some context menu commands (Compress, Extract) for faster navigation
-- new menu "Extract to Folder or Plain", extracts an archive contents to a folder if it has more than 1 element in the root or extracts the contents directly into the current folder
-- updated FileManager context menu options to be able to enable/disable the added menu items
-- added "Compress to \*" menu to create separate archives for each selected file (currently it opens multiple compress dialogs, though it should be done using some sort of operations queue)
+- added numbers for some context menu commands (**0-Compress, 1-Extract Here, 2-Extract to \***) for faster navigation
+- added **"Extract to Folder or Plain"** menu, extracts an archive contents to a folder if it has more than 1 element in the root or extracts the contents directly into the current folder
+- added **"Compress to \*"** menu to create separate archives for each selected file (currently it opens multiple compress dialogs, though it should be done using some sort of operations queue)
+- updated **FileManager** context menu options to be able to enable/disable the added menu items
 
 ## Build
 
